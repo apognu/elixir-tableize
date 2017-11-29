@@ -5,6 +5,29 @@ defmodule Tableize do
   The function Tablelize.print/1 takes a list of keyword lists, and prints the
   table on standard output. Each element in the keyword lists must be printable
   as a string through Kernel.to_string/1.
+
+  ## Examples
+
+    iex> data = [[city: "Paris", country: "France", planet: "Earth"], [city: "San Francisco", country: "United States of America", planet: "Earth"], [city: "Arcadia", country: "N/A", planet: "Gallifrey"]]
+    iex> Tableize.print(data)
+    :ok
+    
+    iex> data = [[city: "Paris", country: "France", planet: "Earth"], [city: "San Francisco", country: "United States of America", planet: "Earth"], [city: "Arcadia", country: "N/A", planet: "Gallifrey"]]
+    iex> import ExUnit.CaptureIO
+    iex> capture_io fn -> Tableize.print(data) end
+    "CITY            COUNTRY                    PLANET   \\nParis           France                     Earth    \\nSan Francisco   United States of America   Earth    \\nArcadia         N/A                        Gallifrey\\n"
+
+    iex> Tableize.print([])
+    :ok
+
+    The method may return an error in the following cases:
+
+    iex> Tableize.print([[firstname: "Antoine"], [firstname: "Doctor", lastname: "Who"]])
+    {:error, "all rows must be of the same size"}
+
+    iex> Tableize.print([[firstname: %{unprintable: "value"}]])
+    {:error, "cannot marshal some value into String"}
+  
   """
 
   # No more rows in the table
